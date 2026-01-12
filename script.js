@@ -1,37 +1,44 @@
 const productsContainer = document.getElementById("productsContainer");
 const searchBtn = document.getElementById("searchBtn");
+const searchInput = document.getElementById("search");
 
-const mockProducts = [
-  {
-    name: "Fone Bluetooth",
-    price: "R$ 79,90",
-    image: "https://via.placeholder.com/300"
-  },
-  {
-    name: "Smartwatch",
-    price: "R$ 199,90",
-    image: "https://via.placeholder.com/300"
-  }
-];
-
+// Renderiza produtos vindos do backend
 function renderProducts(products) {
   productsContainer.innerHTML = "";
+
+  if (products.length === 0) {
+    productsContainer.innerHTML = "<p>Nenhum produto encontrado</p>";
+    return;
+  }
 
   products.forEach(p => {
     productsContainer.innerHTML += `
       <div class="product">
-        <img src="${p.image}">
-        <h3>${p.name}</h3>
-        <span>${p.price}</span>
+        <img src="${p.image}" alt="${p.title}">
+        <h3>${p.title}</h3>
+        <span>R$ ${p.price}</span>
+        <a href="${p.affiliate_link}" target="_blank">
+          Ver no AliExpress
+        </a>
       </div>
     `;
   });
 }
 
-fetch("/api/produtos?search=fone")
-  .then(res => res.json())
-  .then(data => renderProducts(data));
+// Busca no backend
+async function buscarProdutos() {
+  const termo = searchInput.value;
 
-searchBtn.addEventListener("click", () => {
-  // aqui depois entra busca no banco
-});
+  const res = await fetch(
+    `https://back-end-comparex.onrender.com/products?search=${termo}`
+  );
+
+  const produtos = await res.json();
+  renderProducts(produtos);
+}
+
+// Clique no botão
+searchBtn.addEventListener("click", buscarProdutos);
+
+// (Opcional) busca automática tipo Mercado Livre 🔥
+searchInput.addEventListener("input", buscarProdutos);
