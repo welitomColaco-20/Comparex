@@ -2,16 +2,29 @@ const productsContainer = document.getElementById("productsContainer");
 const searchBtn = document.getElementById("searchBtn");
 const searchInput = document.getElementById("search");
 
-// Renderiza produtos vindos do backend
-function renderProducts(products) {
+let products = []; // aqui fica o "banco"
+
+// 🔥 CARREGA O JSON UMA VEZ
+fetch("products.json")
+  .then(res => res.json())
+  .then(data => {
+    products = data;
+    renderProducts(products); // mostra tudo ao carregar
+  })
+  .catch(() => {
+    productsContainer.innerHTML = "<p>Erro ao carregar produtos</p>";
+  });
+
+// Renderiza produtos
+function renderProducts(list) {
   productsContainer.innerHTML = "";
 
-  if (products.length === 0) {
+  if (list.length === 0) {
     productsContainer.innerHTML = "<p>Nenhum produto encontrado</p>";
     return;
   }
 
-  products.forEach(p => {
+  list.forEach(p => {
     productsContainer.innerHTML += `
       <div class="product">
         <img src="${p.image}" alt="${p.title}">
@@ -25,20 +38,19 @@ function renderProducts(products) {
   });
 }
 
-// Busca no backend
-async function buscarProdutos() {
-  const termo = searchInput.value;
+// 🔎 BUSCA LOCAL (SEM API)
+function buscarProdutos() {
+  const termo = searchInput.value.toLowerCase();
 
-  const res = await fetch(
-    `https://back-end-comparex.onrender.com/products?search=${termo}`
+  const filtrados = products.filter(p =>
+    p.title.toLowerCase().includes(termo)
   );
 
-  const produtos = await res.json();
-  renderProducts(produtos);
+  renderProducts(filtrados);
 }
 
 // Clique no botão
 searchBtn.addEventListener("click", buscarProdutos);
 
-// (Opcional) busca automática tipo Mercado Livre 🔥
+// Busca automática tipo Mercado Livre
 searchInput.addEventListener("input", buscarProdutos);
