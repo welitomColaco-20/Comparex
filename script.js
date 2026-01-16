@@ -16,6 +16,20 @@ fetch("products.json")
     productsContainer.innerHTML = "<p>Erro ao carregar produtos</p>";
   });
 
+function getPlatformText(platform) {
+  switch (platform) {
+    case "aliexpress":
+      return "Ver no AliExpress";
+    case "shopee":
+      return "Ver na Shopee";
+    case "mercadolivre":
+      return "Ver no Mercado Livre";
+    case "shein":
+      return "Ver na Shein";
+    default:
+      return "Ver oferta";
+  }
+}
 function renderProducts(list) {
   productsContainer.innerHTML = "";
 
@@ -31,8 +45,8 @@ function renderProducts(list) {
         <h3>${p.title}</h3>
         <span>R$ ${Number(p.price).toFixed(2)}</span>
         <a href="${p.affiliate_link}" target="_blank">
-          Ver no AliExpress
-        </a>
+  ${getPlatformText(p.platform)}
+</a>
       </div>
     `;
   });
