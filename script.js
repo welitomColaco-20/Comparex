@@ -18,7 +18,7 @@ fetch("products.json")
 
 function getPlatformText(platform) {
   switch (platform) {
-    case "aliexpress":
+    case "000":
       return "Ver no AliExpress";
     case "shopee":
       return "Ver na Shopee";
