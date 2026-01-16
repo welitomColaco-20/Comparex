@@ -20,11 +20,11 @@ function getPlatformText(platform) {
   switch (platform) {
     case "000":
       return "Ver no AliExpress";
-    case "shopee":
+    case "111":
       return "Ver na Shopee";
-    case "mercadolivre":
+    case "333":
       return "Ver no Mercado Livre";
-    case "shein":
+    case "222":
       return "Ver na Shein";
     default:
       return "Ver oferta";
